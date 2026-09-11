@@ -1,0 +1,488 @@
+================================================================================
+                    XL-MIMO DRL PROJECT - COMPLETE COMMANDS REFERENCE
+                    ================================================================
+                    Project: Hierarchical Deep Reinforcement Learning for 
+                             Subarray and Beam Selection in Near-Field XL-MIMO
+                    Environment: hdrl_mimo (conda)
+                    Python: 3.11.16
+                    GPU: NVIDIA RTX 4060 Laptop GPU (8.59 GB)
+================================================================================
+
+
+================================================================================
+1. ENVIRONMENT ACTIVATION & DEACTIVATION
+================================================================================
+
+# ACTIVATE ENVIRONMENT (MUST RUN FIRST IN EVERY NEW SESSION)
+& "C:\dev\tools\miniconda\shell\condabin\conda-hook.ps1"; conda activate hdrl_mimo
+
+# VERIFY YOU'RE IN THE RIGHT ENVIRONMENT
+python --version
+# Expected: Python 3.11.16
+
+# CHECK ACTIVATED ENVIRONMENT NAME
+conda info --envs | findstr "*"
+
+# DEACTIVATE ENVIRONMENT
+conda deactivate
+
+# LIST ALL CONDA ENVIRONMENTS
+conda env list
+
+
+================================================================================
+2. SYSTEM INFORMATION & SPECS CHECK
+================================================================================
+
+# CHECK PYTHON VERSION
+python --version
+
+# CHECK PIP VERSION
+pip --version
+
+# CHECK ALL INSTALLED PACKAGES
+pip list
+
+# CHECK GPU STATUS (NVIDIA)
+nvidia-smi
+
+# CHECK GPU DETAILS
+nvidia-smi --query-gpu=name,memory.total,memory.free,memory.used,temperature.gpu,utilization.gpu --format=csv
+
+# CHECK PYTORCH GPU STATUS
+python -c "import torch; print('CUDA:', torch.cuda.is_available()); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'No GPU'); print('PyTorch:', torch.__version__)"
+
+# CHECK CUDA VERSION FROM PYTORCH
+python -c "import torch; print('CUDA Version:', torch.version.cuda if torch.cuda.is_available() else 'Not available')"
+
+# CHECK GPU MEMORY USAGE
+python -c "import torch; print(f'GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB') if torch.cuda.is_available() else print('No GPU')"
+
+# RUN FULL SYSTEM VERIFICATION SCRIPT
+python verify_setup.py
+
+
+================================================================================
+3. PROJECT NAVIGATION
+================================================================================
+
+# NAVIGATE TO PROJECT FOLDER
+cd "C:\Users\ROG007\Documents\year 2\tri sem 4\ml\project\hdrl_mimo_sys"
+
+# SHOW CURRENT DIRECTORY
+pwd
+
+# LIST PROJECT FILES AND FOLDERS
+dir
+
+# VIEW PROJECT STRUCTURE
+tree /F
+
+
+================================================================================
+4. JUPYLAB COMMANDS
+================================================================================
+
+# LAUNCH JUPYLAB (Opens in Browser)
+jupyter lab
+
+# LAUNCH JUPYLAB WITH SPECIFIC PORT
+jupyter lab --port=8888
+
+# LAUNCH JUPYLAB WITHOUT BROWSER
+jupyter lab --no-browser
+
+# LIST ACTIVE JUPYTER SERVERS
+jupyter server list
+
+# SHUT DOWN JUPYTER LAB
+jupyter lab stop
+
+# LAUNCH JUPYTER NOTEBOOK (Alternative)
+jupyter notebook
+
+# CHECK JUPYTER KERNELS
+jupyter kernelspec list
+
+
+================================================================================
+5. VS CODE COMMANDS
+================================================================================
+
+# OPEN PROJECT IN VS CODE
+code .
+
+# OPEN SPECIFIC FILE IN VS CODE
+code verify_setup.py
+
+# OPEN PROJECT IN NEW VS CODE WINDOW
+code . -n
+
+# INSTALL VS CODE EXTENSIONS (Run in VS Code Terminal)
+# Python: ms-python.python
+# Jupyter: ms-toolsai.jupyter
+# GitLens: eamodio.gitlens
+
+
+================================================================================
+6. PACKAGE MANAGEMENT
+================================================================================
+
+# INSTALL A NEW PACKAGE
+pip install package_name
+
+# INSTALL SPECIFIC VERSION
+pip install package_name==version
+
+# UPDATE A PACKAGE
+pip install --upgrade package_name
+
+# UNINSTALL A PACKAGE
+pip uninstall package_name
+
+# CHECK ALL PACKAGES WITH VERSIONS
+pip freeze
+
+# SAVE CURRENT PACKAGES TO REQUIREMENTS
+pip freeze > requirements.txt
+
+# INSTALL FROM REQUIREMENTS FILE
+pip install -r requirements.txt
+
+# CHECK OUTDATED PACKAGES
+pip list --outdated
+
+# SEARCH FOR A PACKAGE
+pip search package_name
+
+
+================================================================================
+7. GIT COMMANDS (Version Control)
+================================================================================
+
+# INITIALIZE GIT REPOSITORY
+git init
+
+# CHECK GIT STATUS
+git status
+
+# ADD ALL FILES TO STAGING
+git add .
+
+# ADD SPECIFIC FILE
+git add filename.py
+
+# COMMIT CHANGES
+git commit -m "Your commit message here"
+
+# VIEW COMMIT HISTORY
+git log --oneline
+
+# CREATE NEW BRANCH
+git branch branch_name
+
+# SWITCH TO BRANCH
+git checkout branch_name
+
+# CONNECT TO REMOTE REPOSITORY
+git remote add origin https://github.com/yourusername/your-repo.git
+
+# PUSH TO REMOTE
+git push -u origin main
+
+
+================================================================================
+8. TESTING & DEBUGGING COMMANDS
+================================================================================
+
+# RUN VERIFICATION SCRIPT
+python verify_setup.py
+
+# TEST PYTORCH INSTALLATION
+python -c "import torch; print(torch.__version__)"
+
+# TEST GYMNASIUM INSTALLATION
+python -c "import gymnasium as gym; print(gym.__version__)"
+
+# TEST STABLE-BASELINES3
+python -c "import stable_baselines3 as sb3; print(sb3.__version__)"
+
+# TEST ALL MAJOR IMPORTS
+python -c "import numpy, scipy, pandas, matplotlib, seaborn, gymnasium, stable_baselines3, torch; print('All imports successful!')"
+
+# RUN PYTHON SCRIPT WITH DEBUGGING
+python -m pdb script_name.py
+
+
+================================================================================
+9. CONDA ENVIRONMENT MANAGEMENT
+================================================================================
+
+# CREATE NEW CONDA ENVIRONMENT
+conda create -n env_name python=3.11 -y
+
+# CLONE EXISTING ENVIRONMENT
+conda create --name new_env --clone hdrl_mimo
+
+# EXPORT ENVIRONMENT TO YAML
+conda env export > environment.yml
+
+# CREATE ENVIRONMENT FROM YAML
+conda env create -f environment.yml
+
+# REMOVE ENVIRONMENT
+conda env remove -n env_name
+
+# UPDATE CONDA
+conda self update
+
+
+================================================================================
+10. TENSORBOARD (Training Metrics Visualization)
+================================================================================
+
+# LAUNCH TENSORBOARD
+tensorboard --logdir=results/logs/
+
+# LAUNCH TENSORBOARD WITH SPECIFIC PORT
+tensorboard --logdir=results/logs/ --port=6006
+
+# LAUNCH TENSORBOARD AND OPEN IN BROWSER
+tensorboard --logdir=results/logs/ --host=localhost
+
+
+================================================================================
+11. PROJECT-SPECIFIC COMMANDS
+================================================================================
+
+# GENERATE POLAR-DOMAIN CODEBOOK
+python -c "from src.codebook.polar_codebook import generate_codebook; generate_codebook()"
+
+# SIMULATE NEAR-FIELD CHANNEL
+python -c "from src.channel.near_field import generate_channel; generate_channel()"
+
+# TEST CUSTOM GYMNASIUM ENVIRONMENT
+python -c "import gymnasium as gym; from src.environment.xl_mimo_env import XLMIMOEnv; env = XLMIMOEnv(); obs, info = env.reset(); print('Environment ready!')"
+
+# TRAIN HIGH-LEVEL RL AGENT
+python src/agents/high_level.py --config configs/default.yaml
+
+# TRAIN LOW-LEVEL RL AGENT
+python src/agents/low_level.py --config configs/default.yaml
+
+# RUN EXPERIMENT WITH GPU
+python -c "import torch; torch.cuda.is_available() and print('Running on GPU') or print('Running on CPU')"
+
+
+================================================================================
+12. QUICK ONE-LINE COMMANDS FOR COMMON TASKS
+================================================================================
+
+# ACTIVATE AND CHECK ENVIRONMENT IN ONE LINE
+& "C:\dev\tools\miniconda\shell\condabin\conda-hook.ps1"; conda activate hdrl_mimo; python --version
+
+# FULL SYSTEM CHECK
+python verify_setup.py && python -c "import torch; print('GPU Ready!')"
+
+# INSTALL ALL DEPENDENCIES FROM SCRATCH
+pip install -r requirements.txt
+
+# LAUNCH JUPYLAB AND TENSORBOARD SIDE-BY-SIDE
+start jupyter lab && start tensorboard --logdir=results/logs/
+
+# CLEAN PYTHON CACHE FILES
+find . -type d -name "__pycache__" -exec rm -rf {} +
+
+# CHECK DISK SPACE
+wmic logicaldisk where DeviceID="C:" get Size,FreeSpace
+
+
+================================================================================
+13. TROUBLESHOOTING COMMANDS
+================================================================================
+
+# FIX PIP INSTALLATION
+python -m pip install --upgrade pip
+
+# REINSTALL PYTORCH (GPU Version)
+pip uninstall torch torchvision torchaudio
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+
+# REINSTALL PYTORCH (CPU Version - Fallback)
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+
+# FIX JUPYTER KERNEL
+python -m ipykernel install --user --name=hdrl_mimo --display-name="Python 3.11 (hdrl_mimo)"
+
+# CLEAR PYTHON CACHE
+python -c "import shutil, os; [shutil.rmtree(os.path.join(root, '__pycache__')) for root, dirs, files in os.walk('.') if '__pycache__' in dirs]"
+
+# CHECK PATH VARIABLE
+echo $env:Path
+
+# CHECK CONDA PATH
+conda info
+
+
+================================================================================
+14. PERFORMANCE MONITORING
+================================================================================
+
+# MONITOR GPU IN REAL-TIME (Update every 1 second)
+nvidia-smi --query-gpu=timestamp,name,pci.bus_id,driver_version,pstate,pcie.link.gen.max,pcie.link.gen.current,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 1
+
+# CHECK CPU AND MEMORY USAGE
+Get-Counter '\Processor(_Total)\% Processor Time', '\Memory\Available MBytes'
+
+# CHECK PYTHON PROCESS MEMORY USAGE
+python -c "import psutil; print(f'Memory: {psutil.Process().memory_info().rss / 1024**3:.2f} GB')"
+
+# RUN GPU STRESS TEST
+python -c "import torch; x = torch.randn(10000, 10000).cuda(); y = torch.mm(x, x); print('GPU working!')"
+
+
+================================================================================
+15. USEFUL PYTHON ONE-LINERS
+================================================================================
+
+# CHECK IMPORTED MODULES VERSIONS
+python -c "import sys, pkg_resources; print('\n'.join(f'{dist.key}: {dist.version}' for dist in pkg_resources.working_set))"
+
+# CHECK ENVIRONMENT VARIABLES
+python -c "import os; print(os.environ.get('CONDA_DEFAULT_ENV'))"
+
+# TEST GPU MATRIX MULTIPLICATION SPEED
+python -c "import time, torch; x = torch.randn(5000, 5000).cuda(); t = time.time(); y = torch.mm(x, x); torch.cuda.synchronize(); print(f'Time: {time.time()-t:.2f}s')"
+
+
+================================================================================
+16. QUICK REFERENCE - DAILY WORKFLOW
+================================================================================
+
+# STEP 1: OPEN POWERSHELL
+# STEP 2: ACTIVATE ENVIRONMENT
+& "C:\dev\tools\miniconda\shell\condabin\conda-hook.ps1"; conda activate hdrl_mimo
+
+# STEP 3: NAVIGATE TO PROJECT
+cd "C:\Users\ROG007\Documents\year 2\tri sem 4\ml\project\hdrl_mimo_sys"
+
+# STEP 4: OPEN VS CODE
+code .
+
+# STEP 5: START JUPYLAB (if needed)
+jupyter lab
+
+# STEP 6: VERIFY EVERYTHING
+python verify_setup.py
+
+# STEP 7: START CODING!
+
+
+================================================================================
+17. VISUAL PROJECT STRUCTURE REFERENCE
+================================================================================
+
+hdrl_mimo_sys/
+│
+├── src/
+│   ├── __init__.py
+│   ├── channel/
+│   │   ├── __init__.py
+│   │   ├── near_field.py          # Spherical wave propagation
+│   │   └── channel_generator.py   # Multi-user channel generation
+│   │
+│   ├── codebook/
+│   │   ├── __init__.py
+│   │   ├── polar_codebook.py      # Polar-domain beam codebook
+│   │   └── subarray.py            # Subarray partitioning
+│   │
+│   ├── precoding/
+│   │   ├── __init__.py
+│   │   ├── analog.py              # Analog beam selection
+│   │   └── digital.py             # MMSE/ZF digital precoding
+│   │
+│   ├── environment/
+│   │   ├── __init__.py
+│   │   ├── xl_mimo_env.py         # Custom Gymnasium environment
+│   │   └── reward.py              # Reward functions
+│   │
+│   ├── agents/
+│   │   ├── __init__.py
+│   │   ├── high_level.py          # Subarray activation agent
+│   │   └── low_level.py           # Beam selection agent
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       ├── config.py              # YAML config loading
+│       └── metrics.py             # Performance tracking
+│
+├── notebooks/
+│   ├── 01_channel_visualization.ipynb
+│   ├── 02_codebook_generation.ipynb
+│   ├── 03_env_testing.ipynb
+│   └── 04_training_analysis.ipynb
+│
+├── configs/
+│   ├── default.yaml
+│   └── experiments/
+│       ├── exp1_subarray.yaml
+│       └── exp2_beam_selection.yaml
+│
+├── data/
+│   ├── raw/                        # Raw simulation data
+│   └── processed/                  # Processed datasets
+│
+├── results/
+│   ├── plots/                      # Generated figures
+│   ├── models/                     # Trained model checkpoints
+│   └── logs/                       # Training logs (TensorBoard)
+│
+├── tests/
+│   ├── test_channel.py
+│   ├── test_codebook.py
+│   └── test_environment.py
+│
+├── requirements.txt
+├── verify_setup.py
+├── PROJECT_COMMANDS.txt  (THIS FILE)
+├── README.md
+├── .gitignore
+└── .vscode/
+    └── settings.json
+
+
+================================================================================
+18. EMERGENCY RESET COMMANDS
+================================================================================
+
+# IF EVERYTHING BREAKS - CLEAN REINSTALL
+# WARNING: THIS WILL DELETE YOUR ENVIRONMENT!
+
+# Delete the environment
+conda deactivate
+conda env remove -n hdrl_mimo
+
+# Recreate environment
+conda create -n hdrl_mimo python=3.11 -y
+conda activate hdrl_mimo
+
+# Install all packages
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+pip install numpy==1.26.4 scipy==1.13.1 pandas==2.2.2 matplotlib==3.9.2 seaborn==0.13.2
+pip install jupyterlab==4.2.5 ipykernel==6.29.5 notebook==7.2.1
+pip install gymnasium==0.29.1 stable-baselines3==2.3.0
+pip install tensorboard==2.17.1 pyyaml==6.0.2 tqdm==4.66.5 scikit-learn==1.5.1 h5py==3.12.1
+
+# Register kernel
+python -m ipykernel install --user --name=hdrl_mimo --display-name="Python 3.11 (hdrl_mimo)"
+
+# Verify
+python verify_setup.py
+
+
+================================================================================
+                   END OF COMMANDS REFERENCE
+                   ================================
+                   Keep this file handy for quick reference!
+                   Good luck with your XL-MIMO DRL Project! 🚀
+================================================================================

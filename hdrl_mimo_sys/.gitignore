@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.so
+.Python
+env/
+venv/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data
+data/raw/
+data/processed/
+
+# Results
+results/models/
+results/logs/
+
+# IDE
+.vscode/
+.idea/
+
+# Conda
+.conda/
+
+# PyTorch
+*.pth
+*.pt
+
+# TensorBoard
+logs/
+runs/
+
+# OS
+.DS_Store
+Thumbs.db

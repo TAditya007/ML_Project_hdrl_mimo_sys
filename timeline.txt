@@ -1,0 +1,67 @@
+# ============================================================================
+# PHASE 1: CORE SIMULATION PIPELINE — ✅ COMPLETED
+# ============================================================================
+# Date completed: 2026-09-10
+# Total files: 12
+# Total tests: 132 (all passing)
+# Total figures: 14
+#
+# Milestone M1.1: Channel Modeling ✅
+#   [✓] src/channel/near_field.py         — spherical wavefront, y-axis ULA
+#   [✓] src/channel/channel_generator.py  — multipath, correlation, batch
+#
+# Milestone M1.2: Codebook Design ✅
+#   [✓] src/codebook/subarray.py          — 3 partitioning strategies
+#   [✓] src/codebook/polar_codebook.py    — near-field (θ, r) beam grid
+#
+# Milestone M1.3: Precoding Design ✅
+#   [✓] src/precoding/analog.py           — block-diagonal F_RF, unit-modulus
+#   [✓] src/precoding/digital.py          — ZF / MMSE / MRT / water-filling
+#
+# Milestone M1.4: Reward Function ✅
+#   [✓] src/environment/reward.py         — 4-objective weighted reward
+#
+# Milestone M1.5: Testing & Validation ✅
+#   [✓] tests/test_channel.py             — 32 passed
+#   [✓] tests/test_codebook.py            — 54 passed, 1 xfail (backlog #4)
+#   [✓] tests/test_environment.py         — 46 passed
+#
+# Milestone M1.6: Visualization ✅
+#   [✓] notebooks/01_channel_visualization.ipynb  — 7 figures
+#   [✓] notebooks/02_codebook_generation.ipynb    — 7 figures
+#
+# ============================================================================
+# KEY METRICS (Phase 1)
+# ============================================================================
+# Channel:
+#   Fraunhofer distance: 21.94 m (64-ant ULA @ 28 GHz)
+#   Near-field region:   r < 2.19 m
+#   Fresnel region:      2.19 m – 21.94 m
+#   Far-field region:    r > 21.94 m
+#
+# Codebook:
+#   Dense size:          1210 beams (121 angles × 10 ranges)
+#   Angular resolution:  1.82°
+#   Grid step:           1.00° (finer than resolution — required)
+#   Pruned @ 0.95:       186 beams (85% reduction, 99.4% power)
+#
+# Precoding:
+#   ZF sum-rate:         23.95 b/s/Hz (4-user, 4-RF)
+#   MMSE sum-rate:       23.91 b/s/Hz
+#   MRT sum-rate:        4.83 b/s/Hz (baseline)
+#
+# Reward:
+#   4 objectives: rate, overhead, power, interference
+#   All monotonicity checks pass
+#
+# ============================================================================
+# KNOWN ITEMS CARRIED TO PHASE 2 / CLEANUP
+# ============================================================================
+# [#1] MRT per-column normalization      — src/precoding/digital.py
+# [#2] np.corrcoef RuntimeWarning         — src/channel/channel_generator.py
+# [#3] Near-field ratio ~0.99 diagnostic  — src/channel/channel_generator.py
+# [#4] Subarray axis alignment (x→y)      — src/codebook/subarray.py (test xfailed)
+#
+# ============================================================================
+# STATUS: PHASE 1 COMPLETE ✅ — READY FOR PHASE 2
+# ============================================================================
