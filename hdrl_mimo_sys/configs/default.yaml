@@ -1,0 +1,140 @@
+# ============================================================================
+# DEFAULT CONFIGURATION — HDRL XL-MIMO
+# ============================================================================
+# Baseline config for the hierarchical DRL subarray/beam selection project.
+#
+# Maps 1:1 to `ExperimentConfig` in `src/utils/config.py`.
+#
+# Loading:
+#     from src.utils.config import ExperimentConfig
+#     cfg = ExperimentConfig.from_yaml(default_path="configs/default.yaml")
+#
+# Experiments (in configs/experiments/) override specific fields:
+#     cfg = ExperimentConfig.from_yaml(
+#         default_path="configs/default.yaml",
+#         experiment_path="configs/experiments/exp1_subarray.yaml",
+#     )
+#
+# NOTE ON SCIENTIFIC NOTATION:
+#     PyYAML uses YAML 1.1 spec, which requires a SIGN in the exponent.
+#     - 1.0e-3    → string (broken)
+#     - 1.0e-03   → float  (fixed)
+#     - 28.0e9    → string (broken)
+#     - 2.8e+10   → float  (fixed)
+#     Always include + or - after `e`.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# METADATA
+# ----------------------------------------------------------------------------
+experiment_name: "default"
+experiment_description: "Baseline HDRL configuration for near-field XL-MIMO"
+author: "Student"
+
+# ----------------------------------------------------------------------------
+# SYSTEM CONFIGURATION (physical layer)
+# ----------------------------------------------------------------------------
+system:
+  # ----- Antenna array -----
+  num_antennas: 256                # XL-MIMO total
+  num_subarrays: 8                 # 32 antennas/subarray
+  antenna_spacing: 0.5             # in wavelengths (λ/2)
+  carrier_frequency: 2.8e+10       # 28 GHz (mmWave) — note: e+10 not e10
+  array_type: "uniform_linear"
+
+  # ----- Subarray partitioning -----
+  partition_strategy: "contiguous" # contiguous | interleaved | overlapping
+  overlap_ratio: 0.0               # only used if overlapping
+
+  # ----- Channel model -----
+  path_loss_exponent: 2.0
+  num_multipath: 3
+  multipath_spread_deg: 10.0
+  spatial_correlation: true
+  correlation_factor: 0.3
+  normalize_channels: true
+
+  # ----- Users -----
+  num_users: 4
+  user_distance_min: 2.0           # near-field region for 32-ant subarray
+  user_distance_max: 15.0          # (Fraunhofer ~5.2 m, so 2–15 m is meaningful)
+  user_angle_min_deg: -60.0
+  user_angle_max_deg: 60.0
+
+  # ----- Polar codebook -----
+  codebook_num_angles: 61          # ~2° step; production: 121 (1° step)
+  codebook_num_ranges: 8           # log-spaced ranges
+  codebook_range_min: 2.0          # meters
+  codebook_range_max: 15.0         # meters
+  codebook_range_spacing: "log"
+  codebook_prune_threshold: 0.95   # correlation-based pruning
+
+  # ----- Hybrid precoding -----
+  precoder_type: "mmse"            # zf | mmse | mrt | none
+  precoder_regularization: 1.0e-03
+  precoder_total_power: 1.0
+  precoder_noise_power: 1.0e-03
+  power_allocation: "equal"        # equal | water_filling
+
+  # ----- Random seed -----
+  seed: 42
+
+# ----------------------------------------------------------------------------
+# RL CONFIGURATION (agents + reward)
+# ----------------------------------------------------------------------------
+rl:
+  # ----- High-level agent (subarray selection) -----
+  high_level_learning_rate: 1.0e-03
+  high_level_gamma: 0.99
+  high_level_hidden_dim: 128
+  high_level_replay_buffer_size: 10000
+  high_level_batch_size: 64
+  high_level_target_update_freq: 100
+  high_level_epsilon_start: 1.0
+  high_level_epsilon_end: 0.05
+  high_level_epsilon_decay: 5000
+
+  # ----- Low-level agent (beam selection) -----
+  low_level_learning_rate: 3.0e-04    # was 1e-3; lower for stability
+  low_level_gamma: 0.99
+  low_level_hidden_dim: 128
+  low_level_replay_buffer_size: 10000
+  low_level_batch_size: 64
+  low_level_target_update_freq: 100
+  low_level_epsilon_start: 1.0
+  low_level_epsilon_end: 0.05
+  low_level_epsilon_decay: 5000
+
+  # ----- Shared -----
+  device: "cuda"                   # cuda | cpu
+
+  # ----- Reward weights -----
+  reward_w_rate: 1.0
+  reward_w_overhead: 0.10
+  reward_w_power: 0.05
+  reward_w_interference: 0.20
+  reward_max_sum_rate: 50.0
+  reward_max_beams: 20
+  reward_max_subarrays: 8
+  reward_max_interference: 10.0
+  reward_clip_min: -10.0
+  reward_clip_max: 10.0
+
+# ----------------------------------------------------------------------------
+# TRAINING CONFIGURATION
+# ----------------------------------------------------------------------------
+training:
+  num_episodes: 500
+  max_steps_per_episode: 50
+  eval_frequency: 25               # every 25 episodes, run an eval
+  eval_num_episodes: 10
+  log_frequency: 10
+
+  save_frequency: 50               # checkpoint every 50 episodes
+  checkpoint_dir: "runs/checkpoints"
+  log_dir: "runs/logs"
+
+  early_stop: false
+  early_stop_threshold: 0.0
+  early_stop_patience: 100
+  

@@ -463,11 +463,7 @@ class TestCorrelationMatrix:
 class TestSubarrayCodebookIntegration:
     """Integration between subarray and codebook."""
     
-    @pytest.mark.xfail(
-        reason="Backlog #4: subarray.py is still on x-axis; "
-               "will pass once axis alignment is applied",
-        strict=True,
-    )
+ 
     def test_subarray_positions_match_codebook_axis(self):
         """
         Subarray ULA is on y-axis, matching codebook geometry.

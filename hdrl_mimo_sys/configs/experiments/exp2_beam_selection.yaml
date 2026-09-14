@@ -1,0 +1,96 @@
+# ============================================================================
+# EXPERIMENT 2: BEAM SELECTION
+# ============================================================================
+# Goal: demonstrate that HDRL learns to select DISCRIMINATING beams within
+#       active subarrays when users are clustered in a narrow angular sector.
+#
+# The user distribution is tightened so the low-level agent must:
+#   - Pick beams that are angularly close (small delta-theta)
+#   - Pick beams that focus at similar ranges (small delta-r)
+#   - Avoid inter-user interference through careful beam choice
+#
+# This tests the near-field FOCUSING capability of the polar codebook.
+#
+# What's different from default.yaml:
+#   - Narrow user cluster (+/-10 deg instead of +/-60 deg)
+#   - Tight user range (3-8 m instead of 2-15 m)
+#   - Lower reward_w_overhead (0.05 vs 0.10): allow more beams exploration
+#   - Tighter codebook pruning (0.90 vs 0.95): tests robustness
+#   - Longer training (400 vs 500 is NOT longer; note: 400 vs 500 is shorter,
+#     see text below) - actually 400 episodes for faster iteration
+#
+# Merge order:
+#   built-in defaults <- default.yaml <- THIS FILE (exp2 overrides)
+#
+# Loading:
+#   cfg = ExperimentConfig.from_yaml(
+#       default_path="configs/default.yaml",
+#       experiment_path="configs/experiments/exp2_beam_selection.yaml",
+#   )
+#
+# NOTE: ASCII-only characters to avoid Windows cp1252 decoding issues.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# METADATA
+# ----------------------------------------------------------------------------
+experiment_name: "exp2_beam_selection"
+experiment_description: "Beam selection - discrimination in narrow cluster"
+author: "Student"
+
+# ----------------------------------------------------------------------------
+# SYSTEM OVERRIDES - Tight user distribution
+# ----------------------------------------------------------------------------
+system:
+  # ----- Users -----
+  num_users: 4
+  user_distance_min: 3.0           # tight range
+  user_distance_max: 8.0           # tight range
+  user_angle_min_deg: -10.0        # narrow angular sector
+  user_angle_max_deg: 10.0         # narrow angular sector
+
+  # ----- Codebook: tighter pruning for RL tractability -----
+  codebook_prune_threshold: 0.90   # was 0.95 -> smaller codebook
+
+  # ----- Training seed (unique to this experiment) -----
+  seed: 202
+
+# ----------------------------------------------------------------------------
+# RL OVERRIDES - Emphasis on beam quality
+# ----------------------------------------------------------------------------
+rl:
+  # Beam exploration encouraged (higher overhead tolerance)
+  reward_w_rate: 1.00              # primary objective
+  reward_w_overhead: 0.05          # was 0.10 -> half penalty
+  reward_w_power: 0.05             # unchanged (subarray penalty)
+  reward_w_interference: 0.30      # was 0.20 -> emphasize interference
+
+  # Normalization references (unchanged)
+  reward_max_sum_rate: 50.0
+  reward_max_beams: 20
+  reward_max_subarrays: 8
+  reward_max_interference: 10.0
+  reward_clip_min: -10.0
+  reward_clip_max: 10.0
+
+  # Learning rates - standard for this experiment
+  high_level_learning_rate: 1.0e-03
+  low_level_learning_rate: 1.0e-03
+
+# ----------------------------------------------------------------------------
+# TRAINING OVERRIDES
+# ----------------------------------------------------------------------------
+training:
+  num_episodes: 400                # balanced: fewer than default, more than exp1
+  max_steps_per_episode: 40        # fewer than default (50)
+  eval_frequency: 20
+  eval_num_episodes: 5
+  log_frequency: 10
+
+  save_frequency: 40
+  checkpoint_dir: "runs/exp2_beam_selection/checkpoints"
+  log_dir: "runs/exp2_beam_selection/logs"
+
+  early_stop: false
+  early_stop_threshold: 0.0
+  early_stop_patience: 100

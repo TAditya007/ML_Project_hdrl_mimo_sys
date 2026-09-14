@@ -1,0 +1,88 @@
+# ============================================================================
+# EXPERIMENT 1: SUBARRAY SELECTION
+# ============================================================================
+# Goal: demonstrate that HDRL learns SPARSE subarray activation.
+#       Only a subset of the 8 subarrays are needed to achieve most
+#       of the achievable sum-rate. With a stronger power/overhead
+#       penalty, the agent should trade throughput for efficiency.
+#
+# What's different from default.yaml:
+#   - Fewer users (3 instead of 4) -> fewer subarrays needed
+#   - Wider angle spread (+/-75 deg) -> users spread out; more selective beams
+#   - Higher reward_w_power (0.30 vs 0.05) -> strongly discourage activation
+#   - Higher reward_w_overhead (0.20 vs 0.10) -> strongly discourage beams
+#   - Shorter training (300 vs 500) -> fast experiment iteration
+#
+# Merge order:
+#   built-in defaults <- default.yaml <- THIS FILE (exp1 overrides)
+#
+# Loading:
+#   cfg = ExperimentConfig.from_yaml(
+#       default_path="configs/default.yaml",
+#       experiment_path="configs/experiments/exp1_subarray.yaml",
+#   )
+#
+# NOTE: This file uses ASCII-only characters (no em-dashes, degree signs,
+# or other Unicode) to avoid Windows cp1252 decoding issues.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# METADATA
+# ----------------------------------------------------------------------------
+experiment_name: "exp1_subarray"
+experiment_description: "Subarray selection - sparsity vs sum-rate trade-off"
+author: "Student"
+
+# ----------------------------------------------------------------------------
+# SYSTEM OVERRIDES
+# ----------------------------------------------------------------------------
+system:
+  # ----- Users -----
+  num_users: 3
+  user_distance_min: 2.0
+  user_distance_max: 12.0
+  user_angle_min_deg: -75.0
+  user_angle_max_deg: 75.0
+
+  # ----- Training seed (different from default for diversity) -----
+  seed: 101
+
+# ----------------------------------------------------------------------------
+# RL OVERRIDES - Emphasis on efficiency
+# ----------------------------------------------------------------------------
+rl:
+  # Stronger penalties for using resources
+  reward_w_rate: 1.00              # unchanged - rate is still primary
+  reward_w_overhead: 0.20          # was 0.10 (2x beam penalty)
+  reward_w_power: 0.30             # was 0.05 (6x subarray penalty)
+  reward_w_interference: 0.20      # unchanged
+
+  # Max normalization references (unchanged)
+  reward_max_sum_rate: 50.0
+  reward_max_beams: 20
+  reward_max_subarrays: 8
+  reward_max_interference: 10.0
+  reward_clip_min: -10.0
+  reward_clip_max: 10.0
+
+  # Learning rates - slightly lower for stability with sparse reward
+  high_level_learning_rate: 5.0e-04
+  low_level_learning_rate: 5.0e-04
+
+# ----------------------------------------------------------------------------
+# TRAINING OVERRIDES - Faster iteration
+# ----------------------------------------------------------------------------
+training:
+  num_episodes: 300                # shorter experiment
+  max_steps_per_episode: 30        # fewer steps per episode
+  eval_frequency: 20
+  eval_num_episodes: 5
+  log_frequency: 10
+
+  save_frequency: 30
+  checkpoint_dir: "runs/exp1_subarray/checkpoints"
+  log_dir: "runs/exp1_subarray/logs"
+
+  early_stop: false
+  early_stop_threshold: 0.0
+  early_stop_patience: 100
