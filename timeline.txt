@@ -1,67 +1,334 @@
 # ============================================================================
-# PHASE 1: CORE SIMULATION PIPELINE — ✅ COMPLETED
+# PROJECT TIMELINE — HDRL XL-MIMO
 # ============================================================================
-# Date completed: 2026-09-10
+# Project: Hierarchical Deep Reinforcement Learning for Subarray and Beam
+#          Selection in Near-Field XL-MIMO Systems
+#
+# Started:        2026-09-09
+# Last updated:   2026-09-15
+# Environment:    hdrl_mimo (Python 3.11.16)
+# GPU:            NVIDIA RTX 4060 Laptop
+# ============================================================================
+
+
+# ============================================================================
+# PHASE 1: CORE SIMULATION PIPELINE — COMPLETED
+# ============================================================================
+# Duration: 2026-09-09 to 2026-09-10
+# Status: COMPLETE
 # Total files: 12
-# Total tests: 132 (all passing)
+# Total tests: 133 passing (0 failures, 0 xfail after fixes)
 # Total figures: 14
 #
-# Milestone M1.1: Channel Modeling ✅
-#   [✓] src/channel/near_field.py         — spherical wavefront, y-axis ULA
-#   [✓] src/channel/channel_generator.py  — multipath, correlation, batch
+# --- Milestone M1.1: Channel Modeling (2026-09-09) ---
+#   [DONE] src/channel/near_field.py         - spherical wavefront, Y-axis ULA
+#   [DONE] src/channel/channel_generator.py  - multipath, correlation, batch
 #
-# Milestone M1.2: Codebook Design ✅
-#   [✓] src/codebook/subarray.py          — 3 partitioning strategies
-#   [✓] src/codebook/polar_codebook.py    — near-field (θ, r) beam grid
+# --- Milestone M1.2: Codebook Design (2026-09-09) ---
+#   [DONE] src/codebook/subarray.py          - 3 partitioning strategies
+#   [DONE] src/codebook/polar_codebook.py    - near-field (theta, r) beam grid
 #
-# Milestone M1.3: Precoding Design ✅
-#   [✓] src/precoding/analog.py           — block-diagonal F_RF, unit-modulus
-#   [✓] src/precoding/digital.py          — ZF / MMSE / MRT / water-filling
+# --- Milestone M1.3: Precoding Design (2026-09-09) ---
+#   [DONE] src/precoding/analog.py           - block-diagonal F_RF, unit-modulus
+#   [DONE] src/precoding/digital.py          - ZF / MMSE / MRT / water-filling
 #
-# Milestone M1.4: Reward Function ✅
-#   [✓] src/environment/reward.py         — 4-objective weighted reward
+# --- Milestone M1.4: Reward Function (2026-09-09) ---
+#   [DONE] src/environment/reward.py         - 4-objective weighted reward
 #
-# Milestone M1.5: Testing & Validation ✅
-#   [✓] tests/test_channel.py             — 32 passed
-#   [✓] tests/test_codebook.py            — 54 passed, 1 xfail (backlog #4)
-#   [✓] tests/test_environment.py         — 46 passed
+# --- Milestone M1.5: Testing & Validation (2026-09-09 to 09-10) ---
+#   [DONE] tests/test_channel.py             - 32 passed
+#   [DONE] tests/test_codebook.py            - 55 passed (after backlog #4 fix)
+#   [DONE] tests/test_environment.py         - 46 passed
 #
-# Milestone M1.6: Visualization ✅
-#   [✓] notebooks/01_channel_visualization.ipynb  — 7 figures
-#   [✓] notebooks/02_codebook_generation.ipynb    — 7 figures
+# --- Milestone M1.6: Visualization (2026-09-10) ---
+#   [DONE] notebooks/01_channel_visualization.ipynb  - 7 figures
+#   [DONE] notebooks/02_codebook_generation.ipynb    - 7 figures
+#
 #
 # ============================================================================
-# KEY METRICS (Phase 1)
+# PHASE 2: RL + INTEGRATION + EXPERIMENTS — COMPLETED
 # ============================================================================
-# Channel:
-#   Fraunhofer distance: 21.94 m (64-ant ULA @ 28 GHz)
-#   Near-field region:   r < 2.19 m
-#   Fresnel region:      2.19 m – 21.94 m
-#   Far-field region:    r > 21.94 m
+# Duration: 2026-09-12 to 2026-09-15
+# Status: COMPLETE (only README.md remains)
+# Total files: 12 (11 planned + 1 training script)
+#
+# --- Milestone M2.1: Config System (2026-09-12) ---
+#   [DONE] src/utils/config.py               - typed YAML loader, dataclasses
+#
+# --- Milestone M2.2: Environment (2026-09-12) ---
+#   [DONE] src/environment/xl_mimo_env.py    - Gymnasium env, Fix C applied
+#                                              (per-subarray codebook, 256 ant)
+#
+# --- Milestone M2.3: Metrics & Logging (2026-09-12) ---
+#   [DONE] src/utils/metrics.py              - CSV/TensorBoard/plots
+#
+# --- Milestone M2.4: RL Agents (2026-09-12) ---
+#   [DONE] src/agents/high_level.py          - Bernoulli head + Double DQN
+#   [DONE] src/agents/low_level.py           - K heads + Double DQN (masked)
+#
+# --- Milestone M2.5: Config Files (2026-09-12) ---
+#   [DONE] configs/default.yaml
+#   [DONE] configs/experiments/exp1_subarray.yaml
+#   [DONE] configs/experiments/exp2_beam_selection.yaml
+#
+# --- Milestone M2.6: Environment Testing (2026-09-14) ---
+#   [DONE] notebooks/03_env_testing.ipynb    - 8 figures
+#
+# --- Milestone M2.7: Training Loop (2026-09-14) ---
+#   [DONE] src/training/loop.py              - orchestrates HL + LL training
+#
+# --- Milestone M2.8: Full Training Runs (2026-09-14) ---
+#   [DONE] runs/default/                     - 500 episodes
+#   [DONE] runs/exp1_subarray/               - 300 episodes
+#   [DONE] runs/exp2_beam_selection/         - 400 episodes
+#
+# --- Milestone M2.9: Training Analysis (2026-09-14 to 09-15) ---
+#   [DONE] notebooks/04_training_analysis.ipynb  - 8 comparison figures
+#
+# --- Milestone M2.10: Documentation (pending) ---
+#   [    ] README.md                         - project overview
+#
+#
+# ============================================================================
+# KEY METRICS — PHASE 1
+# ============================================================================
+# Channel (256-ant @ 28 GHz, subarray=32 ant):
+#   Subarray aperture:       0.3375 m
+#   Subarray Fraunhofer:     21.26 m
+#   Near-field region:       r < 2.1 m
+#   Fresnel region:          2.1 - 21.3 m
+#   Far-field region:        r > 21.3 m
 #
 # Codebook:
-#   Dense size:          1210 beams (121 angles × 10 ranges)
-#   Angular resolution:  1.82°
-#   Grid step:           1.00° (finer than resolution — required)
-#   Pruned @ 0.95:       186 beams (85% reduction, 99.4% power)
+#   Dense size:              1210 beams (121 angles x 10 ranges)
+#   Angular resolution:      1.82 deg
+#   Grid step:               1.00 deg
+#   Pruned @ 0.95:           ~90 beams
+#   Pruned @ 0.90:           21 beams (exp2 config)
 #
-# Precoding:
-#   ZF sum-rate:         23.95 b/s/Hz (4-user, 4-RF)
-#   MMSE sum-rate:       23.91 b/s/Hz
-#   MRT sum-rate:        4.83 b/s/Hz (baseline)
+# Precoding (Phase 1 tests):
+#   ZF sum-rate:             23.95 b/s/Hz
+#   MMSE sum-rate:           23.91 b/s/Hz
+#   MRT sum-rate:            4.83 b/s/Hz (baseline)
 #
 # Reward:
 #   4 objectives: rate, overhead, power, interference
 #   All monotonicity checks pass
 #
-# ============================================================================
-# KNOWN ITEMS CARRIED TO PHASE 2 / CLEANUP
-# ============================================================================
-# [#1] MRT per-column normalization      — src/precoding/digital.py
-# [#2] np.corrcoef RuntimeWarning         — src/channel/channel_generator.py
-# [#3] Near-field ratio ~0.99 diagnostic  — src/channel/channel_generator.py
-# [#4] Subarray axis alignment (x→y)      — src/codebook/subarray.py (test xfailed)
 #
 # ============================================================================
-# STATUS: PHASE 1 COMPLETE ✅ — READY FOR PHASE 2
+# KEY METRICS — PHASE 2 (TRAINING RESULTS)
+# ============================================================================
+# Default (500 episodes, 4 users, +/-60 deg):
+#   Reward:           +0.3271 -> +0.4006  (+22.5%)
+#   Sum-rate:         18.78  -> 23.45 b/s/Hz  (+4.66)
+#   Final beams:      6.07   (out of 8 subarrays)
+#
+# Exp1_subarray (300 episodes, 3 users, +/-75 deg):
+#   Reward:           +0.1693 -> +0.1655  (-2.3%, by design)
+#   Sum-rate:         18.32  -> 19.36 b/s/Hz  (+1.04)
+#   Final beams:      4.66   (sparsity: fewer subarrays active)
+#   Note: strong power penalty (w_power=0.30) enforces sparsity
+#
+# Exp2_beam_selection (400 episodes, 4 users, +/-10 deg):
+#   Reward:           +0.3376 -> +0.4160  (+23.2%)
+#   Sum-rate:         18.78  -> 23.79 b/s/Hz  (+5.01)
+#   Final beams:      6.83
+#   Note: narrow user cluster forces fine beam discrimination
+#
+# Total training time: ~7 minutes across all 3 experiments
+#
+#
+# ============================================================================
+# ERRORS RESOLVED — CHRONOLOGICAL
+# ============================================================================
+# (2026-09-09) ModuleNotFoundError: numpy
+#   Cause: wrong conda env (base)
+#   Fix:   conda activate hdrl_mimo
+#
+# (2026-09-09) AttributeError: 'NearFieldChannel' has no 'far_field_channel'
+#   Cause: method name typo in compute_near_field_ratio
+#   Fix:   renamed to compute_far_field_channel
+#
+# (2026-09-09) Pylance: Operator '*' not supported for 'float' and 'float|None'
+#   Cause: Optional[float] used in arithmetic
+#   Fix:   cache as local non-Optional float
+#
+# (2026-09-09) Failed: DID NOT RAISE ValueError (num_subarrays > num_antennas)
+#   Cause: test only set num_subarrays, default num_antennas=256 accepted it
+#   Fix:   set both num_antennas=8 AND num_subarrays=100
+#
+# (2026-09-09) AssertionError: angle step 2.00 deg > angular resolution
+#   Cause: codebook grid too coarse (61 angles -> 2 deg step)
+#   Fix:   raised num_angles to 121 (1 deg step)
+#
+# (2026-09-09) AssertionError: best beam angle far from target
+#   Cause: ULA on X-axis makes +theta and -theta indistinguishable
+#   Fix:   moved ULA to Y-axis in near_field.py, polar_codebook.py, subarray.py
+#
+# (2026-09-09) np.corrcoef RuntimeWarning: Degrees of freedom <= 0
+#   Cause: correlating single pairs of values
+#   Fix:   backlogged (cosmetic, low priority)
+#
+# (2026-09-10) test_y_mirror_symmetry FAILED (correlation = 1.0)
+#   Cause: subarray.py still on X-axis
+#   Fix:   backlog #4 — aligned subarray to Y-axis, updated xfail -> pass
+#
+# (2026-09-12) FileNotFoundError: configs/default.yaml (from notebook)
+#   Cause: notebook kernel CWD = notebooks/, not project root
+#   Fix:   added _resolve_config_path() to config.py + absolute path in Cell 2
+#
+# (2026-09-12) UnicodeDecodeError: 'charmap' codec (em-dash)
+#   Cause: Windows default cp1252 encoding vs UTF-8 YAML
+#   Fix:   ASCII-only YAML files + encoding="utf-8" in open()
+#
+# (2026-09-12) YAML TypeError: '<=' not supported between 'str' and 'int'
+#   Cause: YAML 1.1 parses "28.0e9" as string (no signed exponent)
+#   Fix:   changed to "2.8e+10" (signed exponent required by YAML 1.1)
+#
+# (2026-09-12) Pylance: dict unpacking breaks type narrowing (tuples)
+#   Cause: **inputs dict loses element type info in notebooks
+#   Fix:   inlined arguments in tests
+#
+# (2026-09-14) RuntimeError: loading state_dict size mismatch (hidden_dim)
+#   Cause: test created agent2 with default hidden_dim=128 vs saved 64
+#   Fix:   passed hidden_dim=HIDDEN to agent2 + added arch validation in load()
+#
+# (2026-09-14) Warning: Codebook built for full array but subarray has 8 ant
+#   Cause: 64-ant codebook used with 8-ant subarrays (Fix C needed)
+#   Fix:   built per-subarray codebook (32 ant), env raised array to 256 ant
+#
+# (2026-09-14) All rewards = +0.0000 during training
+#   Cause: missing tracker.add_step() call in training loop
+#   Fix:   added tracker.add_step(reward, info) after env.step()
+#
+# (2026-09-14) Output path: runs/metrics.csv (should be runs/<exp>/metrics.csv)
+#   Cause: os.path.dirname("runs/logs") returns "runs"
+#   Fix:   run_root = os.path.join("runs", cfg.experiment_name)
+#
+# (2026-09-14) LL_loss exploding: 52 -> 1026 -> 21116
+#   Cause: summed Bellman target over 8 subarrays
+#   Fix:   rewrote train_step() with PER-SUBARRAY masked loss
+#          (each head's Q updated against its own target)
+#
+# (2026-09-14) Pylance: np.prod(env.observation_space.shape) type issue
+#   Cause: shape typed as tuple[int,...] | None
+#   Fix:   obs_shape = env.observation_space.shape
+#          assert obs_shape is not None
+#          obs_dim = int(obs_shape[0])
+#
+# (2026-09-15) ModuleNotFoundError: 'tabulate' (pandas to_markdown)
+#   Cause: pandas .to_markdown() needs tabulate package
+#   Fix:   pip install tabulate (or manual markdown writer)
+#
+# (2026-09-15) pandas 3.0.5 + matplotlib: np_1darray typing issues
+#   Cause: pandas 3.0 changed .values / .rolling() return types
+#   Fix:   np.asarray(..., dtype=float) around pandas ops
+#
+#
+# ============================================================================
+# BACKLOG — PENDING ITEMS (not blocking)
+# ============================================================================
+# [#1] MRT per-column normalization
+#      File:     src/precoding/digital.py
+#      Priority: Medium
+#      Impact:   Fair comparison with ZF/MMSE (MRT uses more power)
+#
+# [#2] np.corrcoef RuntimeWarning
+#      File:     src/channel/channel_generator.py
+#      Priority: Low (cosmetic)
+#      Impact:   Warning noise in test output
+#
+# [#3] Near-field ratio ~0.99 diagnostic
+#      File:     src/channel/channel_generator.py
+#      Priority: Low
+#      Impact:   Diagnostic becomes uninformative after normalization
+#
+# [#4] HL summed-target loss scale issue
+#      File:     src/agents/high_level.py
+#      Priority: Medium
+#      Impact:   HL loss explodes to ~3000 in exp2 (still learns)
+#      Fix:      Same pattern as LL fix — per-bit loss instead of summed
+#
+#
+# ============================================================================
+# FILES DELIVERED — COMPLETE INDEX
+# ============================================================================
+# Phase 1 (12 files):
+#   src/channel/near_field.py
+#   src/channel/channel_generator.py
+#   src/codebook/subarray.py
+#   src/codebook/polar_codebook.py
+#   src/precoding/analog.py
+#   src/precoding/digital.py
+#   src/environment/reward.py
+#   tests/test_channel.py
+#   tests/test_codebook.py
+#   tests/test_environment.py
+#   notebooks/01_channel_visualization.ipynb
+#   notebooks/02_codebook_generation.ipynb
+#
+# Phase 2 (12 files):
+#   src/utils/config.py
+#   src/environment/xl_mimo_env.py
+#   src/utils/metrics.py
+#   src/agents/high_level.py
+#   src/agents/low_level.py
+#   src/training/loop.py
+#   configs/default.yaml
+#   configs/experiments/exp1_subarray.yaml
+#   configs/experiments/exp2_beam_selection.yaml
+#   notebooks/03_env_testing.ipynb
+#   notebooks/04_training_analysis.ipynb
+#   README.md  (pending)
+#
+#
+# ============================================================================
+# OUTPUTS GENERATED — FIGURES & DATA
+# ============================================================================
+# Phase 1 figures (14):
+#   notebooks/figures/01_channel_magnitude.png
+#   notebooks/figures/02_phase_progression.png
+#   notebooks/figures/03_near_vs_far_field.png
+#   notebooks/figures/04_fraunhofer_boundary.png
+#   notebooks/figures/05_path_loss.png
+#   notebooks/figures/06_regime_map.png
+#   notebooks/figures/07_multi_user.png
+#   notebooks/figures/08_codebook_grid.png
+#   notebooks/figures/09_beam_pattern.png
+#   notebooks/figures/10_range_focusing.png
+#   notebooks/figures/11_correlation_matrix.png
+#   notebooks/figures/12_subarray_partitioning.png
+#   notebooks/figures/13_matched_beam_heatmap.png
+#   notebooks/figures/14_dense_vs_pruned.png
+#
+# Phase 2 figures (16):
+#   notebooks/figures/env_01_observation.png ... env_08_config_comparison.png
+#   notebooks/figures/analysis_01_reward_curves.png ...
+#                             analysis_08_beam_distribution.png
+#
+# Training outputs (per experiment):
+#   runs/<name>/metrics.csv        (per-episode)
+#   runs/<name>/summary.json       (initial vs final)
+#   runs/<name>/plots/*.png        (5 training curves)
+#   runs/checkpoints/<name>_ep*.pt.hl / .ll
+#
+# Cross-experiment outputs:
+#   runs/comparison_table.csv
+#   runs/comparison_table.md
+#
+#
+# ============================================================================
+# FINAL STATUS
+# ============================================================================
+# Phase 1: COMPLETE
+# Phase 2: COMPLETE (README pending — last file)
+#
+# Total source files:     19
+# Total config files:      3
+# Total test files:        3 (133 tests passing)
+# Total notebooks:         4 (30 figures)
+# Total training runs:     3 (1200 episodes total)
+#
+# The project is ~95% complete. Only README.md remains.
 # ============================================================================
